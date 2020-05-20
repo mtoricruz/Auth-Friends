@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 const Form = props => {
     const [newFriends, setNewFriends] = useState({
@@ -14,10 +14,11 @@ const Form = props => {
     };
 
     const postFriend = friend => {
-        axios.post('http://localhost:5000/api/friends', friend)
+        axiosWithAuth()
+            .post('/api/friends', friend)
             .then(res => {
                 setNewFriends([...newFriends, res.data])
-                console.log('postFriend---->', res)
+                console.log('postFriend---->', res.data)
             })
             .catch(err => console.log(err))
     }
@@ -30,24 +31,30 @@ const Form = props => {
     return (
         <div className='Form'>
             <form onSubmit={submitForm}>
+              <label>Name:
                 <input
                   type='text'
                   name='name'
                   onChange={changeHandler}
                   value={props.name}
                 />
+              </label>
+              <label>Age:  
                 <input
                   type='number'
                   name='age'
                   onChange={changeHandler}
                   value={props.age}
                 />
+              </label>
+              <label>Email:
                 <input
                   type='text'
                   name='email'
                   onChange={changeHandler}
                   value={props.email}
                 />
+              </label>
                 <button>Add New Friend</button>
             </form>
         </div>
